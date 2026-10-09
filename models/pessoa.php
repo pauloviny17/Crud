@@ -1,39 +1,45 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/CRUD/configs/conexao.php';
 
-class Pessoa{
+class Pessoa
+{
     private $id_pessoa;
     private $nome;
 
-public function __construct($id = false){
-if($id){
-    $this->id_pessoa = $id;
-    $this->carregar();
-}
-}
+    public function __construct($id = false)
+    {
+        if ($id) {
+            $this->id_pessoa = $id;
+            $this->carregar();
+        }
+    }
 
-public function getNome(){
-    return $this->nome;
-}
-public function setNome($nome){
-    $this->nome = $nome;
-}
-public function getId(){
-    return $this->id_pessoa;
-}
-public function carregar(){
-                $conexao = Conexao::conectar();
-                $sql = "SELECT * FROM pessoa WHERE id_pessoa = :id";
-                $stmt = $conexao->prepare($sql);
-$stmt->bindValue(':id', $this->getId());
-$stmt->execute();
-$resultado = $stmt->fetch();
+    public function getNome()
+    {
+        return $this->nome;
+    }
+    public function setNome($nome)
+    {
+        $this->nome = $nome;
+    }
+    public function getId()
+    {
+        return $this->id_pessoa;
+    }
+    public function carregar()
+    {
+        $conexao = Conexao::conectar();
+        $sql = "SELECT * FROM pessoa WHERE id_pessoa = :id";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindValue(':id', $this->getId());
+        $stmt->execute();
+        $resultado = $stmt->fetch();
 
-$this->setNome($resultado['nome']);
+        $this->setNome($resultado['nome']);
+    }
 
-}
-
-public function criar () {
+    public function criar()
+    {
         try {
             $conexao = Conexao::conectar();
             $sql = "INSERT INTO pessoa (nome) VALUES (:nome)";
@@ -45,19 +51,22 @@ public function criar () {
         }
     }
 
-    public static function listar(){
-        try{
+    public static function listar()
+    {
+        try {
             $conexao = Conexao::conectar();
             $sql = "SELECT * FROM pessoa";
             $stmt = $conexao->prepare($sql);
             $stmt->execute();
             $lista = $stmt->fetchAll();
             return $lista;
-        } catch (PDOexception $e){
+        } catch (PDOexception $e) {
+            echo $e->getMessage();
         }
     }
 
-    public function atualizar () {
+    public function atualizar()
+    {
         try {
             $conexao = Conexao::conectar();
             $sql = "UPDATE pessoa SET nome = :nome WHERE id_pessoa = :id";
@@ -70,7 +79,8 @@ public function criar () {
         }
     }
 
-    public function deletar () {
+    public function deletar()
+    {
         try {
             $conexao = Conexao::conectar();
             $sql = "DELETE FROM pessoa WHERE id_pessoa = :id";
